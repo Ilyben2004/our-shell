@@ -16,5 +16,9 @@ typedef struct s_tree
 }t_tree;
 void *ft_malloc(size_t size , t_list **lst);
 int ft_free(t_list *lst);
+char **extract_ops(char * s);
+void print_tree(t_tree *tree);
+t_tree * make_tree(char ***data);
+
 
 #endif

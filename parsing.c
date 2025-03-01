@@ -16,11 +16,11 @@ int main(int ac , char **av)
         phrase = ft_strjoin(phrase , " ");
     }
     //printf("%s\n",phrase);
-    char ** cc = ft_split(phrase , "><|&");
-    while (*cc)
-    {
-        printf("%s\n" , *cc);
-        cc++;
-    }
+    char ** cc = extract_ops(phrase); //ft_split(phrase , "><|&");
+    char ***s;
+    s = malloc(sizeof(char **) * 2);
+    s[0] = ft_split(phrase , "><|&");
+    s[1] = cc;
+    t_tree * tree = make_tree(s);
     return (ft_free(lst));
 }
