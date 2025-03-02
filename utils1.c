@@ -74,20 +74,27 @@ char **extract_ops(char *s)
 
 void put_to_tree(t_tree **node, char **commands_files, int index)
 {
-    if (node != NULL)
+    printf("index = %d \n", index);
+
+    if ((*node) != NULL)
+    {
+        printf("data = %s \n", (*node)->data);
+        printf("left \n");
         put_to_tree(&((*node)->left), commands_files, index - 1);
+        (*node)->right = malloc(sizeof(t_tree));
+        (*node)->right->data = commands_files[index];
+        (*node)->right->left = NULL;
+        (*node)->right->right = NULL;
+    }
     if ((*node) == NULL)
     {
+        printf("opps index = %d \n", index);
         (*node) = malloc(sizeof(t_tree));
         (*node)->data = commands_files[index];
         (*node)->left = NULL;
         (*node)->right = NULL;
         return;
     }
-    (*node)->right = malloc(sizeof(t_tree));
-    (*node)->right->data = commands_files[index];
-    (*node)->right->left = NULL;
-    (*node)->right->right = NULL;
 }
 
 static int double_char_size(char **s)
@@ -95,7 +102,8 @@ static int double_char_size(char **s)
     int i;
     i = 0;
     while (*s)
-    {   s++;
+    {
+        s++;
         i++;
     }
     return (i);
@@ -104,9 +112,10 @@ void print_double_pointer(char **s)
 {
     while (*s)
     {
-        printf("%s\n", *s);
+        printf("%s ", *s);
         s++;
     }
+    printf("\n");
 }
 
 t_tree *make_tree(char ***data)
@@ -117,22 +126,26 @@ t_tree *make_tree(char ***data)
     t_tree *head;
     int last_word;
 
-    printf("ba9i ma khret \n");
     last_word = double_char_size(data[1]) - 1;
-    printf("ba9i ma khret \n");
     tree = malloc(sizeof(t_tree));
     head = tree;
     commands_files = data[0];
     ops = data[1];
     print_double_pointer(ops);
+    print_double_pointer(commands_files);
     while (last_word >= 0)
     {
-        tree->left = malloc(sizeof(t_tree));
-        tree = tree->left;
         tree->data = ops[last_word--];
+        if (last_word != -1)
+        {
+            tree->left = malloc(sizeof(t_tree));
+            tree = tree->left;
+        }
     }
     tree->left = NULL;
-    put_to_tree(&head, commands_files, double_char_size(commands_files));
+    print_tree(head);
+    put_to_tree(&head, commands_files, double_char_size(commands_files) - 1);
+    return (head);
 }
 void print_tree(t_tree *tree)
 {
