@@ -22,7 +22,7 @@ int main(int ac , char **av)
     s[0] = ft_split(phrase , "><|&");
     s[1] = cc;
     t_tree * tree = make_tree(s);
-    printf("****************************************8 \n\n\n\n");
+    printf("****************************************\n\n\n\n");
     print_tree(tree);
     return (ft_free(lst));
 }

@@ -83,6 +83,7 @@ void put_to_tree(t_tree **node, char **commands_files, int index)
         put_to_tree(&((*node)->left), commands_files, index - 1);
         (*node)->right = malloc(sizeof(t_tree));
         (*node)->right->data = commands_files[index];
+        (*node)->right->type = filecommand;
         (*node)->right->left = NULL;
         (*node)->right->right = NULL;
     }
@@ -91,6 +92,7 @@ void put_to_tree(t_tree **node, char **commands_files, int index)
         printf("opps index = %d \n", index);
         (*node) = malloc(sizeof(t_tree));
         (*node)->data = commands_files[index];
+        (*node)->type = filecommand;
         (*node)->left = NULL;
         (*node)->right = NULL;
         return;
@@ -136,6 +138,7 @@ t_tree *make_tree(char ***data)
     while (last_word >= 0)
     {
         tree->data = ops[last_word--];
+        tree->type = get_data_type(tree->data);
         if (last_word != -1)
         {
             tree->left = malloc(sizeof(t_tree));
@@ -152,6 +155,6 @@ void print_tree(t_tree *tree)
     if (tree == NULL)
         return;
     print_tree(tree->left);
-    printf("%s \n", tree->data);
+    printf("%s %d\n", tree->data , tree->type);
     print_tree(tree->right);
 }
