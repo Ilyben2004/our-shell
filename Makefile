@@ -6,14 +6,14 @@ NAME = minishell
 
 
 LIBFT = libft.a
-SRCS = parsing.c utils1.c utils2.c
+SRCS = parsing.c utils1.c utils2.c mylibft.c
 
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -lreadline $(LIBFT) -o $(NAME)
 
 $(LIBFT) : 
 clean:

@@ -26,61 +26,77 @@ char **extract_ops(char *s)
 {
     char **ops;
     int i;
+    int op_found;
+
+    op_found = 0;
     i = 0;
     ops = malloc((sizeof(char **) * 20));
     while (*s)
     {
-        if (*s == '>' && *(s + 1) == '>')
+        if (*s == '>' && *(s + 1) == '>' && commas_ops_check(s))
         {
             ops[i++] = ft_strdup(">>");
             s = s + 2;
+            op_found = 1;
         }
-        else if (*s == '>')
+        else if (*s == '>' && commas_ops_check(s))
         {
-            ops[i++] = ft_strdup(">");
+            ops[i++] = ft_strdup(">" );
             s = s + 1;
+            op_found = 1;
         }
-        else if (*s == '<' && *(s + 1) == '<')
+        else if (*s == '<' && *(s + 1) == '<' && commas_ops_check(s))
         {
             ops[i++] = ft_strdup("<<");
             s = s + 2;
+            op_found = 1;
         }
-        else if (*s == '<')
+        else if (*s == '<' && commas_ops_check(s))
         {
             ops[i++] = ft_strdup("<");
             s = s + 1;
+            op_found = 1;
         }
-        else if (*s == '|' && *(s + 1) == '|')
+        else if (*s == '|' && *(s + 1) == '|' && commas_ops_check(s))
         {
             ops[i++] = ft_strdup("||");
             s = s + 2;
+            op_found = 1;
         }
-        else if (*s == '|')
+        else if (*s == '|' && commas_ops_check(s))
         {
             ops[i++] = ft_strdup("|");
             s = s + 1;
+            op_found = 1;
         }
-        else if (*s == '&' && *(s + 1) == '&')
+        else if (*s == '&' && *(s + 1) == '&' && commas_ops_check(s))
         {
             ops[i++] = ft_strdup("&&");
             s = s + 2;
+            op_found = 1;
         }
         else
             s++;
     }
     ops[i] = NULL;
+    if (!op_found)
+        ops = NULL;
     return (ops);
 }
 
-void put_to_tree(t_tree **node, char **commands_files, int index)
+void put_to_tree(t_tree **node, char **commands_files, int index , int one_node)
 {
-    printf("index = %d \n", index);
 
+    if (one_node)
+    {
+        (*node)->right = NULL;
+        (*node)->data = commands_files[index];
+        (*node)->type = filecommand;
+        return;
+    }
     if ((*node) != NULL)
     {
-        printf("data = %s \n", (*node)->data);
-        printf("left \n");
-        put_to_tree(&((*node)->left), commands_files, index - 1);
+        put_to_tree(&((*node)->left), commands_files, index - 1 , one_node);
         (*node)->right = malloc(sizeof(t_tree));
         (*node)->right->data = commands_files[index];
         (*node)->right->type = filecommand;
@@ -89,7 +105,6 @@ void put_to_tree(t_tree **node, char **commands_files, int index)
     }
     if ((*node) == NULL)
     {
-        printf("opps index = %d \n", index);
         (*node) = malloc(sizeof(t_tree));
         (*node)->data = commands_files[index];
         (*node)->type = filecommand;
@@ -103,7 +118,7 @@ static int double_char_size(char **s)
 {
     int i;
     i = 0;
-    while (*s)
+    while (s && *s)
     {
         s++;
         i++;
@@ -112,9 +127,11 @@ static int double_char_size(char **s)
 }
 void print_double_pointer(char **s)
 {
-    while (*s)
+    if (s == NULL)
+        printf("double pointer is NULL\n");
+    while (s && *s)
     {
-        printf("%s ", *s);
+        printf("%s,", *s);
         s++;
     }
     printf("\n");
@@ -133,8 +150,6 @@ t_tree *make_tree(char ***data)
     head = tree;
     commands_files = data[0];
     ops = data[1];
-    print_double_pointer(ops);
-    print_double_pointer(commands_files);
     while (last_word >= 0)
     {
         tree->data = ops[last_word--];
@@ -146,8 +161,7 @@ t_tree *make_tree(char ***data)
         }
     }
     tree->left = NULL;
-    print_tree(head);
-    put_to_tree(&head, commands_files, double_char_size(commands_files) - 1);
+    put_to_tree(&head, commands_files, double_char_size(commands_files) - 1 ,(double_char_size(commands_files) - 1 == 0) && (ops == NULL));
     return (head);
 }
 void print_tree(t_tree *tree)
