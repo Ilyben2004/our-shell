@@ -22,8 +22,24 @@ void *ft_malloc(size_t size, t_list **lst)
     ft_lstadd_back(lst, new);
     return (new->content);
 }
+
+int extract_ops_helper(char *s, char **ops)
+{
+    int i;
+
+    i = 0;
+    while (*ops)
+    {
+        if (my_strnstr(s, *ops, ft_strlen(*ops)))
+            return (i);
+        i++;
+        ops++;
+    }
+    return (-1);
+}
 char **extract_ops(char *s)
 {
+    char *all_ops[8] = {">>", "<<", ">", "<", "||", "|", "&&", NULL};
     char **ops;
     int i;
     int op_found;
@@ -33,46 +49,10 @@ char **extract_ops(char *s)
     ops = malloc((sizeof(char **) * 20));
     while (*s)
     {
-        if (*s == '>' && *(s + 1) == '>' && commas_ops_check(s))
+        if (extract_ops_helper(s, all_ops) >= 0)
         {
-            ops[i++] = ft_strdup(">>");
-            s = s + 2;
-            op_found = 1;
-        }
-        else if (*s == '>' && commas_ops_check(s))
-        {
-            ops[i++] = ft_strdup(">" );
-            s = s + 1;
-            op_found = 1;
-        }
-        else if (*s == '<' && *(s + 1) == '<' && commas_ops_check(s))
-        {
-            ops[i++] = ft_strdup("<<");
-            s = s + 2;
-            op_found = 1;
-        }
-        else if (*s == '<' && commas_ops_check(s))
-        {
-            ops[i++] = ft_strdup("<");
-            s = s + 1;
-            op_found = 1;
-        }
-        else if (*s == '|' && *(s + 1) == '|' && commas_ops_check(s))
-        {
-            ops[i++] = ft_strdup("||");
-            s = s + 2;
-            op_found = 1;
-        }
-        else if (*s == '|' && commas_ops_check(s))
-        {
-            ops[i++] = ft_strdup("|");
-            s = s + 1;
-            op_found = 1;
-        }
-        else if (*s == '&' && *(s + 1) == '&' && commas_ops_check(s))
-        {
-            ops[i++] = ft_strdup("&&");
-            s = s + 2;
+            ops[i++] = ft_strdup(all_ops[extract_ops_helper(s, all_ops)]);
+            s += ft_strlen(all_ops[extract_ops_helper(s, all_ops)]);
             op_found = 1;
         }
         else
@@ -84,7 +64,7 @@ char **extract_ops(char *s)
     return (ops);
 }
 
-void put_to_tree(t_tree **node, char **commands_files, int index , int one_node)
+void put_to_tree(t_tree **node, char **commands_files, int index, int one_node)
 {
 
     if (one_node)
@@ -96,10 +76,11 @@ void put_to_tree(t_tree **node, char **commands_files, int index , int one_node)
     }
     if ((*node) != NULL)
     {
-        put_to_tree(&((*node)->left), commands_files, index - 1 , one_node);
+        put_to_tree(&((*node)->left), commands_files, index - 1, one_node);
         (*node)->right = malloc(sizeof(t_tree));
+        (*node)->right->parent = (*node);
         (*node)->right->data = commands_files[index];
-        (*node)->right->type = filecommand;
+        (*node)->right->type = (is_file((*node)->type) ? file : command);
         (*node)->right->left = NULL;
         (*node)->right->right = NULL;
     }
@@ -144,14 +125,18 @@ t_tree *make_tree(char ***data)
     t_tree *tree;
     t_tree *head;
     int last_word;
+    t_tree *parent;
 
     last_word = double_char_size(data[1]) - 1;
     tree = malloc(sizeof(t_tree));
     head = tree;
+    parent = NULL;
     commands_files = data[0];
     ops = data[1];
     while (last_word >= 0)
     {
+        tree->parent = parent;
+        parent = tree;
         tree->data = ops[last_word--];
         tree->type = get_data_type(tree->data);
         if (last_word != -1)
@@ -161,14 +146,6 @@ t_tree *make_tree(char ***data)
         }
     }
     tree->left = NULL;
-    put_to_tree(&head, commands_files, double_char_size(commands_files) - 1 ,(double_char_size(commands_files) - 1 == 0) && (ops == NULL));
+    put_to_tree(&head, commands_files, double_char_size(commands_files) - 1, (double_char_size(commands_files) - 1 == 0) && (ops == NULL));
     return (head);
-}
-void print_tree(t_tree *tree)
-{
-    if (tree == NULL)
-        return;
-    print_tree(tree->left);
-    printf("%s %d\n", tree->data , tree->type);
-    print_tree(tree->right);
 }

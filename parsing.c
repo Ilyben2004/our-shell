@@ -1,11 +1,12 @@
 #include "parsing.h"
 
-void sigintHandler(int sig_num)
-{
-    signal(SIGINT, sigintHandler);
-    printf("you called me ?\n");
-    ilyas_parsing(0);
-}
+// void INThandler(int sig)
+// {
+//     char c;
+//     signal(sig, SIG_IGN);
+//     signal(SIGINT, INThandler);
+//     ilyas_parsing(0);
+// }
 
 t_tree *ilyas_parsing(int condition)
 {
@@ -15,8 +16,7 @@ t_tree *ilyas_parsing(int condition)
     lst = NULL;
     char *phrase;
     phrase = NULL;
-    signal(SIGINT, sigintHandler);
-    while (!commas_ops_check(phrase) || (ft_strncmp(phrase , "\n" ,ft_strlen(phrase) == 0)))
+    while (!commas_ops_check(phrase) || (ft_strncmp(phrase, "\n", ft_strlen(phrase) == 0)))
     {
         phrase = ft_strjoin(phrase, readline("$>"));
     }
@@ -31,8 +31,11 @@ t_tree *ilyas_parsing(int condition)
     return (tree);
 }
 
-int main(int ac, char **av)
+int main(int ac, char **av,char **envp)
 {
-    signal(SIGINT, sigintHandler);
-    ilyas_parsing(1);
+    char **paths= extract_paths(envp);
+    t_tree *tree =ilyas_parsing(1);
+    split_tree(tree );
+    add_paths_to_tree(tree, paths);
+    print_tree(tree);
 }
