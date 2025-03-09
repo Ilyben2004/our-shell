@@ -33,7 +33,7 @@ typedef struct s_tree
 
 } t_tree;
 
-void *ft_malloc(size_t size, t_list **lst);
+void *ft_malloc(size_t size);
 int ft_free(t_list *lst);
 char **extract_ops(char *s);
 void print_tree(t_tree *tree);
@@ -51,6 +51,7 @@ char    **extract_paths(char **envp);
 void split_tree(t_tree *tree);
 void add_paths_to_tree(t_tree * tree , char **paths);
 char *my_strchr(char *s, char *target);
-
+int ops_size(char *s, char **ops);
+int extract_ops_helper(char *s, char **ops);
 
 #endif

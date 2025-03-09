@@ -1,5 +1,7 @@
 #include "parsing.h"
 
+t_list *garbage_collector = NULL;
+
 // void INThandler(int sig)
 // {
 //     char c;
@@ -23,8 +25,9 @@ t_tree *ilyas_parsing(int condition)
 
     char **cc = extract_ops(phrase); // ft_split(phrase , "><|&");
     char ***s;
-    s = malloc(sizeof(char **) * 2);
+    s = ft_malloc(sizeof(char **) * 2);
     s[0] = extract_files_commands_strings(phrase, cc);
+    print_double_pointer(s[0]);
     // print_double_pointer(s[0]);
     s[1] = cc;
     t_tree *tree = make_tree(s);
@@ -38,4 +41,5 @@ int main(int ac, char **av,char **envp)
     split_tree(tree );
     add_paths_to_tree(tree, paths);
     print_tree(tree);
+    ft_free(garbage_collector);
 }

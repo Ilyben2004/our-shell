@@ -6,7 +6,7 @@
 /*   By: ibennaje <ibennaje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:31:56 by ibennaje          #+#    #+#             */
-/*   Updated: 2025/03/01 18:13:28 by ibennaje         ###   ########.fr       */
+/*   Updated: 2025/03/09 03:02:58 by ibennaje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static size_t	word_length(char const *word, char *c)
 	return (i);
 }
 
-static void	*ft_free(char **forfree, size_t tozero)
+static void	*my_free(char **forfree, size_t tozero)
 {
 	while (tozero > 0)
 		free(forfree[--tozero]);
@@ -73,7 +73,7 @@ char	**ft_split(char const *s, char *c)
 	if (!s || !*s)
 		return (NULL);
 	nwords = count_words(s, c);
-	splited = (char **)malloc((nwords + 1) * sizeof(char *));
+	splited = (char **)ft_malloc((nwords + 1) * sizeof(char *));
 	if (!splited)
 		return (NULL);
 	i = 0;
@@ -84,7 +84,7 @@ char	**ft_split(char const *s, char *c)
 		wordlength = word_length(s, c);
 		splited[i] = ft_substr(s, 0, wordlength);
 		if (!splited[i])
-			return (ft_free(splited, i));
+			return (my_free(splited, i));
 		s += wordlength;
 		i++;
 	}

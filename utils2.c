@@ -36,7 +36,8 @@ char **extract_files_commands_strings(char *command, char **ops)
 {
     int size = 20;
     int i;
-    char **commandes_files = malloc(sizeof(char **) * size);
+    char **commandes_files = ft_malloc(sizeof(char **) * size);
+
     i = 0;
     if (!ops)
     {

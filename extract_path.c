@@ -29,10 +29,8 @@ char     *check_paths(char **paths, char **command)
         {
                 path = ft_strjoin(paths[i], "/");
                 file = ft_strjoin(path, *command);
-                free(path);
                 if (access(file, X_OK) == 0)
                         return (file);
-                free(file);
         }
         return (NULL);
 }

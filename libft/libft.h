@@ -6,7 +6,7 @@
 /*   By: ibennaje <ibennaje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:38:38 by ibennaje          #+#    #+#             */
-/*   Updated: 2025/03/01 18:13:58 by ibennaje         ###   ########.fr       */
+/*   Updated: 2025/03/09 03:02:11 by ibennaje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,18 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdint.h>
+typedef struct s_list
+{
+	void			*content;
+	struct s_list	*next;
+}t_list;
+# include "../parsing.h"
+
+
+
+
+
+extern t_list *garbage_collector;
 
 int					ft_atoi(const char *nptr);
 void				ft_bzero(void *s, size_t n);
@@ -52,11 +64,6 @@ char				*ft_substr(char const *s, unsigned int start, size_t len);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
 size_t				ft_strlcat(char *dst, const char *src, size_t dstsize);
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}					t_list;
 t_list				*ft_lstnew(void *content);
 void				ft_lstadd_front(t_list **lst, t_list *new);
 int					ft_lstsize(t_list *lst);

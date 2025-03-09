@@ -42,7 +42,7 @@ char	*ft_itoa(int n)
 		return (ft_strdup("-2147483648"));
 	i = nsize(n);
 	isnega = 0;
-	num = (char *)malloc(i);
+	num = (char *)ft_malloc(i);
 	if (!num)
 		return (NULL);
 	num[--i] = 0;
