@@ -23,12 +23,11 @@ t_tree *ilyas_parsing(int condition)
         phrase = ft_strjoin(phrase, readline("$>"));
     }
 
-    char **cc = extract_ops(phrase); // ft_split(phrase , "><|&");
+    char **cc = extract_ops(phrase);
     char ***s;
     s = ft_malloc(sizeof(char **) * 2);
     s[0] = extract_files_commands_strings(phrase, cc);
     print_double_pointer(s[0]);
-    // print_double_pointer(s[0]);
     s[1] = cc;
     t_tree *tree = make_tree(s);
     return (tree);

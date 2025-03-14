@@ -19,7 +19,7 @@ enum data_type
     or,              //6 
     command,         //7
     file,            //8
-    filecommand      //9
+    eof
 };
 typedef struct s_tree
 {

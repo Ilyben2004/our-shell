@@ -14,6 +14,8 @@ enum data_type get_data_type(char *s)
         return (append);
     if (!strcmp(s, "<")) // use ft_strcmp later
         return (oredirection);
+    if (!strcmp(s, "<<")) // use ft_strcmp later
+        return (heredoc);
     return (-1);
 }
 
@@ -41,8 +43,10 @@ char **extract_files_commands_strings(char *command, char **ops)
     i = 0;
     if (!ops)
     {
-        commandes_files[0] = ft_strdup(command);
+        commandes_files[0] = ft_strtrim(ft_strdup(command) , " \t");
         commandes_files[1] = NULL;
+        if ((commandes_files[0][0]) == 34 && ((commandes_files[0][ft_strlen(commandes_files[0]) - 1]) == 34))
+            commandes_files[0] = ft_strtrim(commandes_files[0], "\x22");
         return (commandes_files);
     }
     while (*ops && size--)
@@ -54,7 +58,7 @@ char **extract_files_commands_strings(char *command, char **ops)
                 command = my_strnstr(command, *ops, ft_strlen(command)) + 1;
                 while ((*command) && (*command == ' ') || (*command == '\t'))
                     command++;
-                commandes_files[i++] = ft_substr(command , 0 , my_strchr(command , " \t") - command);
+                commandes_files[i++] = ft_substr(command, 0, my_strchr(command, " \t") - command);
                 command += ft_strlen(commandes_files[i - 1]);
             }
             else
@@ -64,9 +68,15 @@ char **extract_files_commands_strings(char *command, char **ops)
                 command += (my_strnstr(command, *ops, ft_strlen(command)) - command) + ft_strlen(*ops);
             }
         }
+        commandes_files[i - 1] = ft_strtrim(commandes_files[i - 1], " \t");
+        if ((commandes_files[i - 1][0]) == 34 && ((commandes_files[i - 1][ft_strlen(commandes_files[i - 1]) - 1]) == 34))
+            commandes_files[i - 1] = ft_strtrim(commandes_files[i - 1], "\x22");
         ops++;
     }
     commandes_files[i++] = ft_substr(command, 0, ft_strlen(command));
+    commandes_files[i - 1] = ft_strtrim(commandes_files[i - 1], " \t");
+    if ((commandes_files[i - 1][0]) == 34 && ((commandes_files[i - 1][ft_strlen(commandes_files[i - 1]) - 1]) == 34))
+        commandes_files[i - 1] = ft_strtrim(commandes_files[i - 1], "\x22");
     commandes_files[i] = NULL;
     return (commandes_files);
 }

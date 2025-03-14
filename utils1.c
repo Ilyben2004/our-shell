@@ -73,7 +73,7 @@ void put_to_tree(t_tree **node, char **commands_files, int index, int one_node ,
     {
         (*node)->right = NULL;
         (*node)->data = commands_files[index];
-        (*node)->type = filecommand;
+        (*node)->type = command;
         return;
     }
     if ((*node) != NULL)
@@ -83,6 +83,8 @@ void put_to_tree(t_tree **node, char **commands_files, int index, int one_node ,
         (*node)->right->parent = (*node);
         (*node)->right->data = commands_files[index];
         (*node)->right->type = (is_file((*node)->type) ? file : command);
+        if ((*node)->type == heredoc)
+            (*node)->right->type = eof;
         (*node)->right->left = NULL;
         (*node)->right->right = NULL;
     }
