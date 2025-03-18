@@ -72,7 +72,7 @@ char *parse_env(char *s)
     int i = 1;
 
     dollr_sign = ft_strchr(s, '$');
-    while (dollr_sign && (ft_isalpha(*(dollr_sign + 1))))
+    while (dollr_sign && (ft_isalpha(*(dollr_sign + 1))) && (*(dollr_sign + 1 ) == '_'))
     {
         if (string_is_inside(s, (int)(dollr_sign - s)) == DOUBLE_QUOTES || string_is_inside(s, (int)(dollr_sign - s)) == INSIDE_NOTHING)
         {
@@ -80,8 +80,8 @@ char *parse_env(char *s)
                 i++;
             char *to_replace = getenv(ft_substr(dollr_sign + 1, 0, i - 1));
             s = replace_strin_in_string(s, (int)(dollr_sign - s), (dollr_sign - s + i), to_replace);
-            dollr_sign = ft_strchr(s, '$');
         }
+        dollr_sign = ft_strchr(dollr_sign + 1, '$');
     }
     return (s);
 }
