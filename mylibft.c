@@ -37,6 +37,7 @@ static int incleded_in_char (char s , char * target)
 	}
 	return (0);
 }
+
 char *my_strchr(char *s, char *target)
 {
 ;

@@ -14,7 +14,6 @@ all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJS) -lreadline $(LIBFT) -o $(NAME)
-	valgrind	./$(NAME)
 
 $(LIBFT) : 
 clean:

@@ -2,19 +2,19 @@
 
 enum data_type get_data_type(char *s)
 {
-    if (!strcmp(s, "|")) // use ft_strcmp later
+    if (!ft_strcmp(s, "|")) 
         return (ft_pipe);
-    if (!strcmp(s, "||")) // use ft_strcmp later
+    if (!ft_strcmp(s, "||")) 
         return (or);
-    if (!strcmp(s, "&&")) // use ft_strcmp later
+    if (!ft_strcmp(s, "&&")) 
         return (and);
-    if (!strcmp(s, ">")) // use ft_strcmp later
+    if (!ft_strcmp(s, ">")) 
         return (oredirection);
-    if (!strcmp(s, ">>")) // use ft_strcmp later
+    if (!ft_strcmp(s, ">>")) 
         return (append);
-    if (!strcmp(s, "<")) // use ft_strcmp later
+    if (!ft_strcmp(s, "<")) 
         return (oredirection);
-    if (!strcmp(s, "<<")) // use ft_strcmp later
+    if (!ft_strcmp(s, "<<")) 
         return (heredoc);
     return (-1);
 }
@@ -36,7 +36,7 @@ int commas_ops_check(char *s)
 
 char **extract_files_commands_strings(char *command, char **ops)
 {
-    int size = 20;
+    int size = ops_size(command , ops) + 1;
     int i;
     char **commandes_files = ft_malloc(sizeof(char **) * size);
 
@@ -53,7 +53,7 @@ char **extract_files_commands_strings(char *command, char **ops)
     {
         if (my_strnstr(command, *ops, ft_strlen(command)))
         {
-            if (!strcmp(*ops, "<"))
+            if (!ft_strcmp(*ops, "<"))
             {
                 command = my_strnstr(command, *ops, ft_strlen(command)) + 1;
                 while ((*command) && (*command == ' ') || (*command == '\t'))

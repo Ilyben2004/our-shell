@@ -33,6 +33,13 @@ typedef struct s_tree
 
 } t_tree;
 
+enum inside_what
+{
+    DOUBLE_QUOTES,  // "" 0
+    ONE_QUOTE,      // '' 1
+    INSIDE_NOTHING, //    2
+};
+
 void *ft_malloc(size_t size);
 int ft_free(t_list *lst);
 char **extract_ops(char *s);
@@ -53,5 +60,9 @@ void add_paths_to_tree(t_tree * tree , char **paths);
 char *my_strchr(char *s, char *target);
 int ops_size(char *s, char **ops);
 int extract_ops_helper(char *s, char **ops);
+int ft_strcmp(char *s1 , char *s2);
+char *replace_strin_in_string(char *s ,  int start_string , int end_string , char *inserted_string);
+enum inside_what string_is_inside(char *s, int start);
+char *parse_env(char *s);
 
 #endif
