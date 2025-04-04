@@ -22,7 +22,8 @@ char     *check_paths(char **paths, char **command)
         char    *file;
 
         i = -1;
-
+        if (!command || !(*command))
+                return (NULL); 
         if (is_path(*command))
             return ((access(*command , X_OK) == 0) ? ft_strdup(*command) : NULL);
         while (paths && paths[++i])

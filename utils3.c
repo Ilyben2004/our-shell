@@ -66,13 +66,16 @@ enum inside_what string_is_inside(char *s, int start)
     return (DOUBLE_QUOTES);
 }
 
+
+
+
 char *parse_env(char *s)
 {
     char *dollr_sign;
     int i = 1;
 
     dollr_sign = ft_strchr(s, '$');
-    while (dollr_sign && (ft_isalpha(*(dollr_sign + 1))) && (*(dollr_sign + 1 ) == '_'))
+    while (dollr_sign && ((ft_isalpha(*(dollr_sign + 1))) || (*(dollr_sign + 1 ) == '_')))
     {
         if (string_is_inside(s, (int)(dollr_sign - s)) == DOUBLE_QUOTES || string_is_inside(s, (int)(dollr_sign - s)) == INSIDE_NOTHING)
         {

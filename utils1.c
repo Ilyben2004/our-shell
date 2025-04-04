@@ -26,9 +26,9 @@ void *ft_malloc(size_t size)
 int extract_ops_helper(char *s, char **ops)
 {
     int i;
-
+    
     i = 0;
-    while (*ops)
+    while (ops && *ops)
     {
         if (my_strnstr(s, *ops, ft_strlen(*ops)))
             return (i);
@@ -46,6 +46,8 @@ char **extract_ops(char *s)
     int size;
 
     size = ops_size(s , all_ops);
+    if (size == 0)
+        return (NULL);
     op_found = 0;
     i = 0;
     ops = ft_malloc((sizeof(char **) * size));

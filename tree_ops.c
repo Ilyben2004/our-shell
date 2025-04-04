@@ -26,7 +26,10 @@ void add_paths_to_tree(t_tree * tree , char **paths)
     if (tree == NULL)
         return ;
     if (tree->type == command)
+    {
+        print_double_pointer(tree->s);
         tree->path = check_paths(paths , tree->s);
+    }
     add_paths_to_tree(tree->right , paths);
     add_paths_to_tree(tree->left , paths);
 }
