@@ -1,12 +1,13 @@
 #ifndef PARSING_H
 #define PARSING_H
 
-#include "libft/libft.h"
-#include <stdio.h>
-#include <string.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <signal.h>
+# include "libft/libft.h"
+# include <stdio.h>
+# include <string.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
+# include <fcntl.h>
 
 enum data_type
 {
@@ -67,8 +68,7 @@ enum inside_what string_is_inside(char *s, int start);
 char *parse_env(char *s);
 
 // builts ins ////////////
-void ft_env(char **envp);
-void ft_echo (char *command);
+void ft_echo(t_tree *node);
 /////////////////////////
 
 #endif

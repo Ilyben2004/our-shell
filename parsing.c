@@ -19,8 +19,6 @@ t_tree *ilyas_parsing(int condition)
     char *phrase;
     phrase = readline("$>");
     phrase = parse_env(phrase);
-    ft_echo (phrase);
-    exit(0);
     char **cc = extract_ops(phrase);
     char ***s;
     s = ft_malloc(sizeof(char **) * 2);
@@ -31,12 +29,22 @@ t_tree *ilyas_parsing(int condition)
     return (tree);
 }
 
-int main(int ac, char **av,char **envp)
+// int main(int ac, char **av,char **envp)
+// {
+//     char **paths= extract_paths(envp);
+//     t_tree *tree =ilyas_parsing(1);
+//     split_tree(tree );
+//     add_paths_to_tree(tree, paths);
+//     print_tree(tree);
+//     ft_free(garbage_collector);
+// }
+
+// built ins tests
+
+int main(int ac, char **av)
 {
-    char **paths= extract_paths(envp);
-    t_tree *tree =ilyas_parsing(1);
-    split_tree(tree );
-    add_paths_to_tree(tree, paths);
-    print_tree(tree);
-    ft_free(garbage_collector);
+    t_tree node;
+    node.data =  readline("$>");
+    node.s = ft_split(node.data , " \t");
+    ft_echo(&node);
 }
