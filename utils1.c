@@ -102,7 +102,7 @@ void put_to_tree(t_tree **node, char **commands_files, int index, int one_node ,
     }
 }
 
-static int double_char_size(char **s)
+int double_char_size(char **s)
 {
     int i;
     i = 0;

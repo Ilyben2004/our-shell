@@ -48,3 +48,12 @@ int main(int ac, char **av)
     node.s = ft_split(node.data , " \t");
     ft_echo(&node);
 }
+
+// int main(int ac , char **av)
+// {
+//     t_tree node;
+//     node.data =  readline("$>");
+//     node.s = ft_split(node.data , " \t");
+//     ft_cd(&node);
+
+// }

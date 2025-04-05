@@ -66,9 +66,11 @@ int ft_strcmp(char *s1, char *s2);
 char *replace_strin_in_string(char *s, int start_string, int end_string, char *inserted_string);
 enum inside_what string_is_inside(char *s, int start);
 char *parse_env(char *s);
+int double_char_size(char **s);
 
 // builts ins ////////////
 void ft_echo(t_tree *node);
+int ft_cd(t_tree *node);
 /////////////////////////
 
 #endif
