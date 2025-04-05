@@ -67,10 +67,12 @@ char *replace_strin_in_string(char *s, int start_string, int end_string, char *i
 enum inside_what string_is_inside(char *s, int start);
 char *parse_env(char *s);
 int double_char_size(char **s);
+int ft_pwd(void);
 
 // builts ins ////////////
 void ft_echo(t_tree *node);
 int ft_cd(t_tree *node);
+void ft_export(t_tree *node, t_list **export_envp);
 /////////////////////////
 
 #endif

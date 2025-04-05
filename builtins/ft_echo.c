@@ -11,11 +11,11 @@ char *skip_all_n_options(char *to_write)
     while (*to_write)
     {
         to_write = skip_spaces(to_write);
-        if ( ft_strnstr(to_write, "-n", 2) && ((*(ft_strnstr(to_write, "-n", 2) + 2) == ' ') || (*(ft_strnstr(to_write, "-n", 2) + 2) == '\t')))
+        if (ft_strnstr(to_write, "-n", 2) && ((*(ft_strnstr(to_write, "-n", 2) + 2) == ' ') || (*(ft_strnstr(to_write, "-n", 2) + 2) == '\t') || (*(ft_strnstr(to_write, "-n", 2) + 2) == '\0')))
             to_write += 2;
-        else if (ft_strnstr(to_write , "'-n'" , 4 ) || ft_strnstr(to_write, "\x22-n\x22" , 4) )
-            to_write+=4;
-        else 
+        else if (ft_strnstr(to_write, "'-n'", 4) || ft_strnstr(to_write, "\x22-n\x22", 4))
+            to_write += 4;
+        else
             break;
     }
     return (to_write);

@@ -41,13 +41,13 @@ t_tree *ilyas_parsing(int condition)
 
 // built ins tests
 
-int main(int ac, char **av)
-{
-    t_tree node;
-    node.data =  readline("$>");
-    node.s = ft_split(node.data , " \t");
-    ft_echo(&node);
-}
+// int main(int ac, char **av)
+// {
+//     t_tree node;
+//     node.data =  readline("$>");
+//     node.s = ft_split(node.data , " \t");
+//     ft_echo(&node);
+// }
 
 // int main(int ac , char **av)
 // {
@@ -57,3 +57,32 @@ int main(int ac, char **av)
 //     ft_cd(&node);
 
 // }
+
+
+// int main(int ac , char **av)
+// {
+//     ft_pwd();
+// }
+
+
+// EXPORT
+t_list * strings_to_list(char **strings)
+{
+    t_list * head;
+    head = NULL;
+    while (strings && *strings)
+    {
+        ft_lstadd_back(&head ,ft_lstnew(*strings));
+        strings++;
+    }
+    return (head);
+}
+int main (int ac , char **av , char **envp)
+{
+    t_tree node;
+    t_list *env;
+    env = strings_to_list(envp);
+    node.data =  readline("$>");
+    node.s = ft_split( node.data , " \t");
+    ft_export(&node , &env);
+}
