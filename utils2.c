@@ -2,20 +2,21 @@
 
 enum data_type get_data_type(char *s)
 {
-    if (!ft_strcmp(s, "|")) 
-        return (ft_pipe);
-    if (!ft_strcmp(s, "||")) 
+    if (!strncmp(s, "||", 2))
         return (or);
-    if (!ft_strcmp(s, "&&")) 
+    if (!strncmp(s, "&&", 2))
         return (and);
-    if (!ft_strcmp(s, ">")) 
-        return (oredirection);
-    if (!ft_strcmp(s, ">>")) 
+    if (!strncmp(s, ">>", 2))
         return (append);
-    if (!ft_strcmp(s, "<")) 
-        return (oredirection);
-    if (!ft_strcmp(s, "<<")) 
+    if (!strncmp(s, "<<", 2))
         return (heredoc);
+    if (!strncmp(s, "|", 1))
+        return (ft_pipe);
+    if (!strncmp(s, ">", 1))
+        return (oredirection);
+    if (!strncmp(s, "<", 1))
+        return (iredirection);
+
     return (-1);
 }
 
@@ -24,61 +25,152 @@ int commas_ops_check(char *s)
     int commas;
     if (!s)
         return (0);
-    commas = 0;
-    while (s && *s)
+    while (*s)
     {
-        if (*s == 34)
-            commas++;
-        s++;
+        if (*s == 34 | *s == 39)
+        {
+            if (ft_strchr(s + 1, *s))
+                s = ft_strchr(s + 1, *s) + 1;
+            else
+                return (0);
+        }
+        else
+            s++;
     }
-    return (commas % 2 == 0);
+    return (1);
+}
+
+int find_next_ops(char *command)
+{
+    int i = 0;
+
+    while (command[i])
+    {
+        if (get_data_type(&command[i]) != -1 && commas_ops_check(&command[i]))
+            return (i);
+        i++;
+    }
+    return (-1);
+}
+int there_is_something_between_2_adresses(char *s1, char *s2)
+{
+    while (s1 != s2)
+    {
+        if (*s1 != ' ' && *s1 != '\t')
+            return (0);
+        s1++;
+    }
+    return (1);
+}
+int *input_file_before_command(char *command, char **ops)
+{
+    int size_input_ops = 0;
+    int i = 0;
+    char *next_op;
+    while (ops[i])
+    {
+        if (!ft_strcmp(ops[i], "<"))
+            size_input_ops++;
+        i++;
+    }
+    i = 0;
+    int *input_ops_swap_condition = malloc(sizeof(int ) * (size_input_ops + 1));
+    command = skip_spaces(command);
+    while (*command && i < size_input_ops)
+    {
+        if (!i && get_data_type(command) == 1 && commas_ops_check(command))
+        {
+            input_ops_swap_condition[i++] = 1;
+            command += find_next_ops(command);
+        }
+        else if (get_data_type(command) != -1)
+        {
+            if (get_data_type(command) == 6 || get_data_type(command) == 5 || get_data_type(command) == 2 || get_data_type(command) == 4)
+                command += 2;
+            else
+                command++;
+            next_op = command + find_next_ops(command);
+            if (get_data_type(next_op) == oredirection)
+            {
+                if (there_is_something_between_2_adresses(command, next_op))
+                    input_ops_swap_condition[i++] = 0;
+                else
+                    input_ops_swap_condition[i++] = 1;
+            }
+        }
+        printf("command = %s \n",command);
+        if (find_next_ops(command) == -1)
+            break;
+        command += find_next_ops(command);
+    }
+    return (input_ops_swap_condition);
 }
 
 char **extract_files_commands_strings(char *command, char **ops)
 {
-    int size = ops_size(command , ops) + 1;
+    int size = ops_size(command, ops) + 1;
     int i;
     char **commandes_files = ft_malloc(sizeof(char **) * size);
+    int next_ops_index;
+    char **command_file;
+    int size_input_ops = 0;
 
+    int add_to_i;
+    int skip_one;
     i = 0;
-    if (!ops)
+    int * input_conditions = input_file_before_command(command, ops);
+    while (ops[i])
     {
-        commandes_files[0] = ft_strtrim(ft_strdup(command) , " \t");
-        commandes_files[1] = NULL;
-        if ((commandes_files[0][0]) == 34 && ((commandes_files[0][ft_strlen(commandes_files[0]) - 1]) == 34))
-            commandes_files[0] = ft_strtrim(commandes_files[0], "\x22");
-        return (commandes_files);
+        if (!ft_strcmp(ops[i], "<"))
+            size_input_ops++;
+        printf("ops[%d] = %s\n" , i , ops[i]);
+        i++;
     }
-    while (*ops && size--)
+    i = 0;
+
+    printf("size_inpt_cond = %d \n",size_input_ops);
+    
+    while (i < size_input_ops)
     {
-        if (my_strnstr(command, *ops, ft_strlen(command)))
-        {
-            if (!ft_strcmp(*ops, "<"))
-            {
-                command = my_strnstr(command, *ops, ft_strlen(command)) + 1;
-                while ((*command) && (*command == ' ') || (*command == '\t'))
-                    command++;
-                commandes_files[i++] = ft_substr(command, 0, my_strchr(command, " \t") - command);
-                command += ft_strlen(commandes_files[i - 1]);
-            }
-            else
-            {
-                commandes_files[i] = ft_substr(command, 0, my_strnstr(command, *ops, ft_strlen(command)) - command);
-                i++;
-                command += (my_strnstr(command, *ops, ft_strlen(command)) - command) + ft_strlen(*ops);
-            }
-        }
-        commandes_files[i - 1] = ft_strtrim(commandes_files[i - 1], " \t");
-        if ((commandes_files[i - 1][0]) == 34 && ((commandes_files[i - 1][ft_strlen(commandes_files[i - 1]) - 1]) == 34))
-            commandes_files[i - 1] = ft_strtrim(commandes_files[i - 1], "\x22");
-        ops++;
+        printf("%d \n" , *input_conditions);
+        input_conditions++;
+        i++;
     }
-    commandes_files[i++] = ft_substr(command, 0, ft_strlen(command));
-    commandes_files[i - 1] = ft_strtrim(commandes_files[i - 1], " \t");
-    if ((commandes_files[i - 1][0]) == 34 && ((commandes_files[i - 1][ft_strlen(commandes_files[i - 1]) - 1]) == 34))
-        commandes_files[i - 1] = ft_strtrim(commandes_files[i - 1], "\x22");
-    commandes_files[i] = NULL;
-    return (commandes_files);
+    exit(1);
+
+    // skip_one = 0;
+    // i = 0;
+    // if (!ops)
+    // {
+    //     commandes_files[0] = ft_strdup(command);
+    //     commandes_files[1] = NULL;
+    //     return (commandes_files);
+    // }
+    // while (*command)
+    // {
+    //     skip_one = 0;
+    //     add_to_i = 0;
+    //     command = skip_spaces(command);
+    //     if (get_data_type(command) != -1 && commas_ops_check(command))
+    //     {
+    //         command += ft_strlen(*ops);
+    //         ops++;
+    //         skip_one = 1;
+    //         continue;
+    //     }
+    //     if (skip_one && !ft_strcmp("<", *(ops - 1)))
+    //     {
+    //         commandes_files[i + 1] = ft_substr(command, 0, my_strchr(command, " \t\0") - command);
+    //         command += ft_strlen(commandes_files[i + 1]);
+    //         add_to_i = 1;
+    //         printf("here \n");
+    //     }
+    //     commandes_files[i++] = ft_substr(command, 0, find_next_ops(command));
+    //     command += ft_strlen(commandes_files[i - 1]);
+    //     i += add_to_i;
+    // }
+    // commandes_files[i] = NULL;
+    // return (commandes_files);
 }
 
 int is_file(enum data_type type)

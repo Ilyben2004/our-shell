@@ -1,13 +1,13 @@
 #ifndef PARSING_H
 #define PARSING_H
 
-# include "libft/libft.h"
-# include <stdio.h>
-# include <string.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <signal.h>
-# include <fcntl.h>
+#include "libft/libft.h"
+#include <stdio.h>
+#include <string.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <signal.h>
+#include <fcntl.h>
 
 enum data_type
 {
@@ -52,7 +52,7 @@ int commas_ops_check(char *s);
 void print_double_pointer(char **s);
 char **extract_files_commands_strings(char *command, char **ops);
 char *my_strnstr(const char *haystack, const char *needle, size_t len);
-t_tree *ilyas_parsing(int condition);
+t_tree *ilyas_parsing(int condition, char **envp);
 int is_file(enum data_type type);
 int is_path(char *command);
 char *check_paths(char **paths, char **command);
@@ -67,12 +67,15 @@ char *replace_strin_in_string(char *s, int start_string, int end_string, char *i
 enum inside_what string_is_inside(char *s, int start);
 char *parse_env(char *s);
 int double_char_size(char **s);
-int ft_pwd(void);
+char *skip_spaces(char *s);
+char *handle_commandes_quoets(t_tree *tree);
 
 // builts ins ////////////
 void ft_echo(t_tree *node);
 int ft_cd(t_tree *node);
 void ft_export(t_tree *node, t_list **export_envp);
+int ft_pwd(void);
+
 /////////////////////////
 
 #endif

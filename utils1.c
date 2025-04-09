@@ -119,8 +119,10 @@ void print_double_pointer(char **s)
         printf("double pointer is NULL\n");
     while (s && *s)
     {
-        printf("%s,", *s);
+        printf("%s", *s);
         s++;
+        if(*s)
+            printf(",");
     }
     printf("\n");
 }

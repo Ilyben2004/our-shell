@@ -22,25 +22,13 @@ int is_valid_key(char *s)
     return (1);
 }
 
-// static void push_back(char ***export_envp, char *new_var)
-// {
-
-//     size = double_char_size(*export_envp);
-// }
-
 static void sort_envp(t_list *export_envp)
 {
-    int i;
-    int j;
-    int size;
     t_list *temp;
     t_list *remmember_me;
-
     char *helper;
 
     helper = NULL;
-    i = 0;
-    j = 0;
     temp = NULL;
     while (export_envp)
     {
@@ -71,6 +59,34 @@ static void write_expoert_envp(t_list *export_envp)
         export_envp = export_envp->next;
     }
 }
+
+static void push_back(t_list **export_envp, char *splited_export)
+{
+    char *key;
+    char *value;
+
+    key = ft_substr(splited_export, 0, ft_strchr(splited_export, '=') - splited_export);
+    if (!(*(ft_strchr(splited_export, '=') + 1)))
+        value = ft_strdup("=\x22\x22");
+    else
+    {
+        value =  ft_strdup(ft_strchr(splited_export, '=') + 1);
+        if (*value != 34 && *value != 39)
+        {
+            value = ft_strjoin(value, "\x22");
+            value = ft_strjoin("=\x22", value);
+        }
+        else if (*value  == 39)
+        {
+            value = ft_strjoin(ft_substr(value + 1 , 0 , ft_strlen(value + 1) -1), "\x22");
+            value = ft_strjoin("=\x22", value);
+        }
+        else 
+            value = ft_strjoin("=", value);
+    }
+    ft_lstadd_back(export_envp, ft_lstnew(ft_strjoin(key, value)));
+}
+
 void ft_export(t_tree *node, t_list **export_envp)
 {
     char **splited_export;
@@ -79,7 +95,6 @@ void ft_export(t_tree *node, t_list **export_envp)
 
     splited_export = node->s;
     sort_envp(*export_envp);
-    write_expoert_envp(*export_envp);
     if (double_char_size(node->s) == 1)
         write_expoert_envp(*export_envp);
     else
@@ -87,12 +102,12 @@ void ft_export(t_tree *node, t_list **export_envp)
         splited_export++;
         while (splited_export && *splited_export)
         {
-            if (!ft_strchr(*splited_export, '=') && is_a_valid_key(*splited_export))
+            if (!ft_strchr(*splited_export, '=') && is_valid_key(*splited_export))
                 ft_lstadd_back(export_envp, ft_lstnew(*splited_export));
-            else if (ft_strchr(*splited_export, '=') && is_a_valid_key(*splited_export))
-                ft_lstadd_back(export_envp, ft_substr(*splited_export, 0, ft_strchr(*splited_export, '-') - *splited_export));
+            else if (ft_strchr(*splited_export, '=') && is_valid_key(*splited_export))
+                push_back(export_envp, *splited_export);
             else
-                printf("export : %s  : : not a valid identifier\n", *splited_export);
+                printf("export : %s : not a valid identifier\n", *splited_export);
             splited_export++;
         }
     }

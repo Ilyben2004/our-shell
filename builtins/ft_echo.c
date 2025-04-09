@@ -1,20 +1,50 @@
 #include "../parsing.h"
 
-static char *skip_spaces(char *s)
+char *skip_spaces(char *s)
 {
     while (*s && (*s == ' ' || *s == '\t'))
         s++;
     return (s);
 }
+int is_n_option(char *n_option, int wanna_skip)
+{
+    int len;
+    char *extract_n;
+
+    len = 0;
+    n_option = ft_strtrim(n_option, " ");
+    if (!*n_option)
+        return (0);
+    if ((*n_option == 34) || (*n_option == 39))
+    {
+        len += 2;
+        extract_n = ft_substr(n_option + 1, 0, ft_strchr(n_option + 1, *n_option) - n_option -1);
+    }
+    else if (wanna_skip)
+        extract_n = ft_substr(n_option, 0, my_strchr(n_option, "\t \0") - n_option);
+    else
+        extract_n = n_option;
+    if (*extract_n != '-')
+        return (0);
+    extract_n++;
+    len++;
+    while (*extract_n)
+    {
+        len++;
+        if (*extract_n != 'n')
+            return (0);
+        extract_n++;
+    }
+    return (len);
+}
+
 char *skip_all_n_options(char *to_write)
 {
     while (*to_write)
     {
         to_write = skip_spaces(to_write);
-        if (ft_strnstr(to_write, "-n", 2) && ((*(ft_strnstr(to_write, "-n", 2) + 2) == ' ') || (*(ft_strnstr(to_write, "-n", 2) + 2) == '\t') || (*(ft_strnstr(to_write, "-n", 2) + 2) == '\0')))
-            to_write += 2;
-        else if (ft_strnstr(to_write, "'-n'", 4) || ft_strnstr(to_write, "\x22-n\x22", 4))
-            to_write += 4;
+        if (is_n_option(to_write, 1))
+            to_write += is_n_option(to_write, 1);
         else
             break;
     }
@@ -64,9 +94,7 @@ void ft_echo(t_tree *node)
     if (ft_strnstr(node->data, "-n", ft_strlen(node->data)))
     {
         check_n_option = node->s;
-        if (ft_strcmp(check_n_option[1], "-n") == 0)
-            n_option = 1;
-        else if (ft_strcmp(check_n_option[1], "'-n'") == 0 || ft_strcmp(check_n_option[1], "\x22-n\x22") == 0)
+        if (is_n_option(check_n_option[1], 0))
             n_option = 1;
         else
             n_option = 0;

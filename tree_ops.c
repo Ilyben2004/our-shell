@@ -4,6 +4,8 @@ void split_tree(t_tree *tree)
 {
     if (tree == NULL)
         return ;
+    if(tree->type == command)
+        tree->data = handle_commandes_quoets(tree);
     tree->s = ft_split(tree->data , " \t");
     split_tree(tree->right);
     split_tree(tree->left);
