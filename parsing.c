@@ -24,12 +24,12 @@ t_tree *ilyas_parsing(int condition , char ** envp)
     char ***s;
     s = ft_malloc(sizeof(char **) * 2);
     s[0] = extract_files_commands_strings(phrase, cc);
-    print_double_pointer(s[0]);
-    // s[1] = cc;
-    // t_tree *tree = make_tree(s);
-    // split_tree(tree);
-    // add_paths_to_tree(tree, paths);
-    // print_tree(tree);
+    s[1] = cc;
+    t_tree *tree = make_tree(s);
+    split_tree(tree);
+    add_paths_to_tree(tree, paths);
+    printf ("***************** tree ********************** \n\n");
+    print_tree(tree);
     return (NULL);
 }
 

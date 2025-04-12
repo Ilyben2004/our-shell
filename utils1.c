@@ -95,7 +95,7 @@ void put_to_tree(t_tree **node, char **commands_files, int index, int one_node ,
         (*node) = ft_malloc(sizeof(t_tree));
         (*node)->data = commands_files[index];
         (*node)->parent = last_node_parent;
-        (*node)->type =((*node)->parent->type == iredirection) ? file : command;
+        (*node)->type = command;
         (*node)->left = NULL;
         (*node)->right = NULL;
         return;
