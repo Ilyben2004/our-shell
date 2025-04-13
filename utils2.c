@@ -100,12 +100,13 @@ char *assign_file_and_command(char *command, char **commandes_files, int *i)
     j = *i;
     command = skip_ops(command);
     file = ft_substr(command, 0, my_strchr(command, " \t") - command);
+
     command += ft_strlen(file);
     command = skip_spaces(command);
     if (find_next_ops(command) != -1)
         my_command = ft_substr(command, 0, find_next_ops(command));
     else
-        my_command = ft_substr(command, 0, ft_strchr(my_command, 0) - command);
+        my_command = ft_substr(command, 0, ft_strlen(command));
     command += ft_strlen(my_command);
     commandes_files[j++] = my_command;
     commandes_files[j++] = file;
@@ -134,11 +135,13 @@ char **extract_files_commands_strings(char *command, char **ops)
         else
         {
             command = skip_ops(command);
+            while (command != skip_ops(command))
+                command = skip_ops(command);
             if (find_next_ops(command) != -1)
                 commandes_files[i++] = ft_substr(command, 0, find_next_ops(command));
             else
             {
-                commandes_files[i++] = ft_substr(command, 0, ft_strchr(command, 0) - command);
+                commandes_files[i++] = ft_substr(command, 0, ft_strlen(command));
                 break;
             }
             command += ft_strlen(commandes_files[i - 1]);
@@ -149,7 +152,6 @@ char **extract_files_commands_strings(char *command, char **ops)
 
     return (commandes_files);
 }
-
 
 int is_file(enum data_type type)
 {

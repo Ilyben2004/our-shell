@@ -21,7 +21,7 @@ enum data_type
     ,        // 6
     command, // 7
     file,    // 8
-    eof
+    eof , //9
 };
 typedef struct s_tree
 {
@@ -52,7 +52,7 @@ int commas_ops_check(char *s);
 void print_double_pointer(char **s);
 char **extract_files_commands_strings(char *command, char **ops);
 char *my_strnstr(const char *haystack, const char *needle, size_t len);
-t_tree *ilyas_parsing(int condition, char **envp);
+t_tree *ilyas_parsing(char **envp);
 int is_file(enum data_type type);
 int is_path(char *command);
 char *check_paths(char **paths, char **command);
@@ -69,6 +69,10 @@ char *parse_env(char *s);
 int double_char_size(char **s);
 char *skip_spaces(char *s);
 char *handle_commandes_quoets(t_tree *tree);
+int there_is_something_between_2_adresses(char *s1, char *s2);
+char *skip_ops(char *command);
+int find_next_ops(char *command);
+int check_unexpected_token(char *command);
 
 // builts ins ////////////
 void ft_echo(t_tree *node);

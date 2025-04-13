@@ -70,7 +70,8 @@ char **extract_ops(char *s)
 
 void put_to_tree(t_tree **node, char **commands_files, int index, int one_node , t_tree * last_node_parent)
 {
-
+    if (index < 0)
+        return;
     if (one_node)
     {
         (*node)->right = NULL;
@@ -82,6 +83,8 @@ void put_to_tree(t_tree **node, char **commands_files, int index, int one_node ,
     {
         put_to_tree(&((*node)->left), commands_files, index - 1, one_node, last_node_parent);
         (*node)->right = ft_malloc(sizeof(t_tree));
+        if (!commands_files[index])
+            (*node)->right = NULL;
         (*node)->right->parent = (*node);
         (*node)->right->data = commands_files[index];
         (*node)->right->type = (is_file((*node)->type) ? file : command);
@@ -154,6 +157,8 @@ t_tree *make_tree(char ***data)
             tree = tree->left;
         }
     }
+    print_double_pointer(ops);
+    print_double_pointer(commands_files);
     tree->left = NULL;
     put_to_tree(&head, commands_files, double_char_size(commands_files) - 1, (double_char_size(commands_files) - 1 == 0) && (ops == NULL), tree);
     return (head);
