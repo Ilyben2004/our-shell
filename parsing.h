@@ -9,31 +9,43 @@
 #include <signal.h>
 #include <fcntl.h>
 
-enum data_type
+typedef enum data_type
 {
-    ft_pipe,      // 0
-    iredirection, // 1
-    append,       // 2
-    oredirection, // 3
-    heredoc,      // 4
-        and,      // 5
-    or
-    ,        // 6
-    command, // 7
-    file,    // 8
-    eof , //9
-};
+    PIPE,                   // 0
+    INPUT_REDIRECTION,      // 1
+    APP_OUTPUT_REDIRECTION, // 2
+    OUTPUT_REDIRECTION,     // 3
+    APP_INPUT_REDIRECTION,  // 4
+    AND,                    // 5
+    OR,                     // 6
+    COMMAND,                // 7
+    FT_FILE,                // 8
+    FT_EOF                  // 9
+} e_type;
+
 typedef struct s_tree
 {
     char *path;
     char *data;
+    char **args;
+    char *heredoc_content;
     struct s_tree *left;
     struct s_tree *right;
     struct s_tree *parent;
     enum data_type type;
-    char **s;
-
 } t_tree;
+
+// typedef struct s_tree
+// {
+//     char *path;
+//     char *data;
+//     struct s_tree *left;
+//     struct s_tree *right;
+//     struct s_tree *parent;
+//     enum data_type type;
+//     char **s;
+
+// } t_tree;
 
 enum inside_what
 {

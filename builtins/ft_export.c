@@ -93,9 +93,9 @@ void ft_export(t_tree *node, t_list **export_envp)
     char *key;
     char *value;
 
-    splited_export = node->s;
+    splited_export = node->args;
     sort_envp(*export_envp);
-    if (double_char_size(node->s) == 1)
+    if (double_char_size(node->args) == 1)
         write_expoert_envp(*export_envp);
     else
     {

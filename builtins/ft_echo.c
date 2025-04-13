@@ -93,7 +93,7 @@ void ft_echo(t_tree *node)
     to_write = NULL;
     if (ft_strnstr(node->data, "-n", ft_strlen(node->data)))
     {
-        check_n_option = node->s;
+        check_n_option = node->args;
         if (is_n_option(check_n_option[1], 0))
             n_option = 1;
         else

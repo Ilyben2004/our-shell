@@ -18,9 +18,9 @@ static int check_two_ops(enum data_type op1, enum data_type op2)
 
     if (op1 == op2)
         return (0);
-    if ((op1 == or || op1 == and || op1 == ft_pipe) && (op2 == or || op2 == and || op2 == ft_pipe))
+    if ((op1 == OR|| op1 == AND|| op1 == PIPE) && (op2 == OR|| op2 == AND|| op2 == PIPE))
         return (0);
-    if ((op1 == iredirection || op1 == oredirection || op1 == append || op1 == heredoc) && (op2 == or || op2 == and || op2 == ft_pipe))
+    if ((op1 == INPUT_REDIRECTION || op1 == OUTPUT_REDIRECTION || op1 == APP_OUTPUT_REDIRECTION || op1 == APP_INPUT_REDIRECTION) && (op2 == OR|| op2 == AND|| op2 == PIPE))
         return (0);
     return (1);
 }

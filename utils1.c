@@ -76,7 +76,7 @@ void put_to_tree(t_tree **node, char **commands_files, int index, int one_node ,
     {
         (*node)->right = NULL;
         (*node)->data = commands_files[index];
-        (*node)->type = command;
+        (*node)->type = COMMAND;
         return;
     }
     if ((*node) != NULL)
@@ -87,9 +87,9 @@ void put_to_tree(t_tree **node, char **commands_files, int index, int one_node ,
             (*node)->right = NULL;
         (*node)->right->parent = (*node);
         (*node)->right->data = commands_files[index];
-        (*node)->right->type = (is_file((*node)->type) ? file : command);
-        if ((*node)->type == heredoc)
-            (*node)->right->type = eof;
+        (*node)->right->type = (is_file((*node)->type) ? FT_FILE : COMMAND);
+        if ((*node)->type == APP_INPUT_REDIRECTION)
+            (*node)->right->type = FT_EOF;
         (*node)->right->left = NULL;
         (*node)->right->right = NULL;
     }
@@ -98,7 +98,7 @@ void put_to_tree(t_tree **node, char **commands_files, int index, int one_node ,
         (*node) = ft_malloc(sizeof(t_tree));
         (*node)->data = commands_files[index];
         (*node)->parent = last_node_parent;
-        (*node)->type = command;
+        (*node)->type = COMMAND;
         (*node)->left = NULL;
         (*node)->right = NULL;
         return;
@@ -150,6 +150,7 @@ t_tree *make_tree(char ***data)
         tree->parent = parent;
         parent = tree;
         tree->data = ops[last_word--];
+        printf("tree->data = %s \n", tree->data);
         tree->type = get_data_type(tree->data);
         if (last_word != -1)
         {

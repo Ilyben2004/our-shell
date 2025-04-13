@@ -3,19 +3,19 @@
 enum data_type get_data_type(char *s)
 {
     if (!strncmp(s, "||", 2))
-        return (or);
+        return (OR);
     if (!strncmp(s, "&&", 2))
-        return (and);
+        return (AND);
     if (!strncmp(s, ">>", 2))
-        return (append);
+        return (APP_OUTPUT_REDIRECTION);
     if (!strncmp(s, "<<", 2))
-        return (heredoc);
+        return (APP_INPUT_REDIRECTION);
     if (!strncmp(s, "|", 1))
-        return (ft_pipe);
+        return (PIPE);
     if (!strncmp(s, ">", 1))
-        return (oredirection);
+        return (OUTPUT_REDIRECTION);
     if (!strncmp(s, "<", 1))
-        return (iredirection);
+        return (INPUT_REDIRECTION);
 
     return (-1);
 }
@@ -79,7 +79,7 @@ int check_file_before_command_irederection(char *command)
     int ret = 0;
     if (get_data_type(command) != -1)
     {
-        if (get_data_type(skip_ops(command) + find_next_ops(command)) == iredirection)
+        if (get_data_type(skip_ops(command) + find_next_ops(command)) == INPUT_REDIRECTION)
         {
             if (there_is_something_between_2_adresses(command, command + find_next_ops(command)))
                 ret = 1;
@@ -125,7 +125,7 @@ char **extract_files_commands_strings(char *command, char **ops)
     while (*command)
     {
         command = skip_spaces(command);
-        if (first_loop && get_data_type(command) == iredirection)
+        if (first_loop && get_data_type(command) == INPUT_REDIRECTION)
             command = assign_file_and_command(command, commandes_files, &i);
         else if (check_file_before_command_irederection(command))
         {
@@ -155,5 +155,5 @@ char **extract_files_commands_strings(char *command, char **ops)
 
 int is_file(enum data_type type)
 {
-    return (type == iredirection || type == append || type == oredirection);
+    return (type == INPUT_REDIRECTION || type == APP_OUTPUT_REDIRECTION || type == OUTPUT_REDIRECTION);
 }
