@@ -37,17 +37,17 @@ t_tree *ilyas_parsing(char **envp)
     return (tree);
 }
 
-int main(int ac, char **av, char **envp)
-{
+// int main(int ac, char **av, char **envp)
+// {
 
-    int i = 0;
-    t_tree *tree;
-    while ((tree = ilyas_parsing(envp)))
-    {
-        i++;
-    }
-    return (0);
-}
+//     int i = 0;
+//     t_tree *tree;
+//     while ((tree = ilyas_parsing(envp)))
+//     {
+//         i++;
+//     }
+//     return (0);
+// }
 
 // // built ins tests
 
@@ -79,26 +79,27 @@ int main(int ac, char **av, char **envp)
 // }
 
 //EXPORT
-// t_list *strings_to_list(char **strings)
-// {
-//     t_list *head;
-//     head = NULL;
-//     while (strings && *strings)
-//     {
-//         ft_lstadd_back(&head, ft_lstnew(*strings));
-//         strings++;
-//     }
-//     return (head);
-// }
-// int main(int ac, char **av, char **envp)
-// {
-//     t_tree node;
-//     t_list *env;
-//     env = strings_to_list(envp);
-//     while (1)
-//     {
-//         node.data = readline("$>");
-//         node.s = ft_split(node.data, " \t");
-//         ft_export(&node, &env);
-//     }
-// }
+
+t_list *strings_to_list(char **strings)
+{
+    t_list *head;
+    head = NULL;
+    while (strings && *strings)
+    {
+        ft_lstadd_back(&head, ft_lstnew(*strings));
+        strings++;
+    }
+    return (head);
+}
+int main(int ac, char **av, char **envp)
+{
+    t_tree node;
+    t_list *env;
+    env = strings_to_list(envp);
+    while (1)
+    {
+        node.data = readline("$>");
+        node.args = ft_split(node.data, " \t");
+        ft_export(&node, &env);
+    }
+}
