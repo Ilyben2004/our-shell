@@ -10,7 +10,7 @@ t_list *garbage_collector = NULL;
 //     ilyas_parsing(0);
 // }
 
-t_tree *ilyas_parsing(char **envp)
+t_tree *ilyas_parsing(t_list *envp)
 {
     char **paths = extract_paths(envp);
     t_list *lst;
@@ -20,9 +20,9 @@ t_tree *ilyas_parsing(char **envp)
     char *phrase;
     phrase = readline("$>");
     add_history(phrase);
-    phrase = parse_env(phrase);
+    phrase = parse_env(phrase, envp);
     if (!check_unexpected_token(phrase))
-        return ( printf("unexpexted token \n"),NULL);
+        return (printf("unexpexted token \n"), NULL);
     char **cc = extract_ops(phrase);
     char ***s;
     s = ft_malloc(sizeof(char **) * 2);
@@ -42,7 +42,8 @@ t_tree *ilyas_parsing(char **envp)
 
 //     int i = 0;
 //     t_tree *tree;
-//     while ((tree = ilyas_parsing(envp)))
+//     t_list *envp_list = strings_to_list(envp);
+//     while ((tree = ilyas_parsing(envp_list)))
 //     {
 //         i++;
 //     }
@@ -78,28 +79,17 @@ t_tree *ilyas_parsing(char **envp)
 //     ft_pwd();
 // }
 
-//EXPORT
+// EXPORT
 
-t_list *strings_to_list(char **strings)
-{
-    t_list *head;
-    head = NULL;
-    while (strings && *strings)
-    {
-        ft_lstadd_back(&head, ft_lstnew(*strings));
-        strings++;
-    }
-    return (head);
-}
 int main(int ac, char **av, char **envp)
 {
     t_tree node;
     t_list *env;
     env = strings_to_list(envp);
-    while (1)
-    {
-        node.data = readline("$>");
-        node.args = ft_split(node.data, " \t");
-        ft_export(&node, &env);
-    }
+    node.data = readline("$>");
+    node.args = ft_split(node.data, " \t");
+    ft_cd(&node, env);
+    node.data = readline("$>");
+    node.args = ft_split(node.data, " \t");
+    ft_export(&node, &env);
 }

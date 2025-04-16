@@ -64,11 +64,11 @@ int commas_ops_check(char *s);
 void print_double_pointer(char **s);
 char **extract_files_commands_strings(char *command, char **ops);
 char *my_strnstr(const char *haystack, const char *needle, size_t len);
-t_tree *ilyas_parsing(char **envp);
+t_tree *ilyas_parsing(t_list *envp);
 int is_file(enum data_type type);
 int is_path(char *command);
 char *check_paths(char **paths, char **command);
-char **extract_paths(char **envp);
+char **extract_paths(t_list *envp);
 void split_tree(t_tree *tree);
 void add_paths_to_tree(t_tree *tree, char **paths);
 char *my_strchr(char *s, char *target);
@@ -77,7 +77,7 @@ int extract_ops_helper(char *s, char **ops);
 int ft_strcmp(char *s1, char *s2);
 char *replace_strin_in_string(char *s, int start_string, int end_string, char *inserted_string);
 enum inside_what string_is_inside(char *s, int start);
-char *parse_env(char *s);
+char *parse_env(char *s , t_list *envp);
 int double_char_size(char **s);
 char *skip_spaces(char *s);
 char *handle_commandes_quoets(t_tree *tree);
@@ -85,12 +85,13 @@ int there_is_something_between_2_adresses(char *s1, char *s2);
 char *skip_ops(char *command);
 int find_next_ops(char *command);
 int check_unexpected_token(char *command);
+t_list *strings_to_list(char **strings);
 
 // builts ins ////////////
 void ft_echo(t_tree *node);
-int ft_cd(t_tree *node);
+int ft_cd(t_tree *node , t_list * envp);
 void ft_export(t_tree *node, t_list **export_envp);
-int ft_pwd(void);
+char* ft_pwd(void);
 
 /////////////////////////
 

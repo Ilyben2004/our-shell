@@ -7,7 +7,7 @@ NAME = minishell
 
 LIBFT = libft.a
 BUILTINSDIR = builtins
-SRCS = parsing.c utils1.c utils2.c mylibft.c extract_path.c tree_ops.c utils3.c utils4.c builtins/ft_echo.c  builtins/ft_cd.c builtins/ft_pwd.c builtins/ft_export.c unexpectedtoken.c
+SRCS = parsing.c utils1.c utils2.c mylibft.c extract_path.c tree_ops.c utils3.c utils4.c builtins/ft_echo.c  builtins/ft_cd.c builtins/ft_pwd.c builtins/ft_export.c builtins/ft_export_helper.c builtins/ft_export_push_back.c unexpectedtoken.c
  
 OBJS = $(SRCS:.c=.o)
 
