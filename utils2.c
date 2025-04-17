@@ -103,12 +103,16 @@ char *assign_file_and_command(char *command, char **commandes_files, int *i)
 
     command += ft_strlen(file);
     command = skip_spaces(command);
-    if (find_next_ops(command) != -1)
-        my_command = ft_substr(command, 0, find_next_ops(command));
-    else
-        my_command = ft_substr(command, 0, ft_strlen(command));
-    command += ft_strlen(my_command);
-    commandes_files[j++] = my_command;
+
+    if (get_data_type(command) == -1 && *command)
+    {
+        if (find_next_ops(command) != -1)
+            my_command = ft_substr(command, 0, find_next_ops(command));
+        else
+            my_command = ft_substr(command, 0, ft_strlen(command));
+        command += ft_strlen(my_command);
+        commandes_files[j++] = my_command;
+    }
     commandes_files[j++] = file;
     *i = j;
     return (command);
