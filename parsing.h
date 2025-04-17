@@ -33,6 +33,7 @@ typedef struct s_tree
     struct s_tree *right;
     struct s_tree *parent;
     enum data_type type;
+    int to_skip;
 } t_tree;
 
 // typedef struct s_tree
@@ -58,7 +59,7 @@ void *ft_malloc(size_t size);
 int ft_free(t_list *lst);
 char **extract_ops(char *s);
 void print_tree(t_tree *tree);
-t_tree *make_tree(char ***data);
+t_tree *make_tree(char ***data , int * to_skip);
 enum data_type get_data_type(char *s);
 int commas_ops_check(char *s);
 void print_double_pointer(char **s);

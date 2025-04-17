@@ -12,7 +12,6 @@ int ft_cd(t_tree *node, t_list *envp)
         return (1);
     if (chdir(node->args[1]) == -1)
         perror(node->args[1]);
-    printf("ana hna \n");
     pwd = ft_strjoin("PWD=", ft_pwd());
     push_back(&envp , old_pwd);
     push_back(&envp , pwd);
