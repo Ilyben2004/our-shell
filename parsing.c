@@ -50,22 +50,16 @@ int *get_to_skip(char *command, char **ops)
     return (to_skip);
 }
 
-t_tree *ilyas_parsing(t_list *envp)
+t_tree *ilyas_parsing(char *phrase, t_list *envp)
 {
-//// spliiit with new_line <3
     char **paths = extract_paths(envp);
     int *to_skip;
     t_list *lst;
     int i;
     i = 0;
     lst = NULL;
-    char *phrase;
-    phrase = readline("$>");
-
-    add_history(phrase);
     phrase = parse_env(phrase, envp);
-    if (*skip_spaces(phrase) == 0)
-        return (ilyas_parsing(envp));
+    add_history(phrase);
     if (!check_unexpected_token(phrase))
         return (printf("unexpexted token \n"), NULL);
     char **cc = extract_ops(phrase);
@@ -74,13 +68,6 @@ t_tree *ilyas_parsing(t_list *envp)
     s[0] = extract_files_commands_strings(phrase, cc);
     s[1] = cc;
     to_skip = get_to_skip(phrase, cc);
-    // while (*cc)
-    // {
-    //     printf("%s = %d \n", *cc, *to_skip);
-    //     cc++;
-    //     to_skip++;
-    // }
-    // exit(0);
     t_tree *tree = make_tree(s, to_skip);
     split_tree(tree);
     add_paths_to_tree(tree, paths);
@@ -94,9 +81,16 @@ int main(int ac, char **av, char **envp)
     int i = 0;
     t_tree *tree;
     t_list *envp_list = strings_to_list(envp);
-    while ((tree = ilyas_parsing(envp_list)))
+    while (1)
     {
-        i++;
+        char *phrase;
+        phrase = readline("$>");
+        char **commands = ft_split(phrase , "\n");
+        while(commands && *commands)
+        {
+            tree = ilyas_parsing(*commands , envp_list);
+            commands++;
+        }
     }
     return (0);
 }

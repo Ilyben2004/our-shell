@@ -65,7 +65,7 @@ int commas_ops_check(char *s);
 void print_double_pointer(char **s);
 char **extract_files_commands_strings(char *command, char **ops);
 char *my_strnstr(const char *haystack, const char *needle, size_t len);
-t_tree *ilyas_parsing(t_list *envp);
+t_tree *ilyas_parsing(char * phrase , t_list *envp);
 int is_file(enum data_type type);
 int is_path(char *command);
 char *check_paths(char **paths, char **command);
