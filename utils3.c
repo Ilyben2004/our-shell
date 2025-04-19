@@ -21,7 +21,6 @@ int ops_size(char *s, char **all_ops)
 
 char *replace_strin_in_string(char *s, int start_string, int end_string, char *inserted_string)
 {
-    printf("replace start = %d , end = %d \n ", start_string, end_string);
     char *new_s;
     new_s = ft_substr(s, 0, start_string);
     new_s = ft_strjoin(new_s, inserted_string);
@@ -75,40 +74,51 @@ char *get_value(t_list *envp, char *key)
     return (NULL);
 }
 
-// char *handle_ted(char *command)
-// {
-//     char * command_head = command;
-//     char *ted_adresse;
-//     if (ft_strchr(command, '~'))
-//     {
-//         ted_adresse = ft_strchr(command, '~');
-//         if (inside_what (ft_strchr(command , '~')) == INSIDE_NOTHING)
-//         {
-//             if((ft_strchr(command , '~') == command_head ) && (my_strchr(ft_strchr(command , '~') , " \t") == (ft_strchr(command , '~') + 1)))
-//             else if ()
-//         }
+char *handle_ted(t_list *envp, char *command)
+{
+    char *command_head = command;
+    char *ted_adresse;
 
-//     }
-//     return (command_head);
-// }
+    ted_adresse = ft_strchr(command, '~');
+    while (ted_adresse)
+    {
+        if (string_is_inside(command, ted_adresse - command) == INSIDE_NOTHING)
+        {
+            if ((ted_adresse == command_head) && (my_strchr(ted_adresse, " \t") == (ted_adresse + 1)))
+            {
+                command = replace_strin_in_string(command, ted_adresse - command, ted_adresse - command + 1, get_value(envp, "HOME"));
+                ted_adresse = ft_strchr(command, '~');
+            }
+            else if ((*(ted_adresse - 1) == ' ' || *(ted_adresse - 1) == '\t') && (my_strchr(ted_adresse, " \t") == (ted_adresse + 1)))
+            {
+                command = replace_strin_in_string(command, ted_adresse - command, ted_adresse - command + 1, get_value(envp, "HOME"));
+                ted_adresse = ft_strchr(command, '~');
+            }
+            else
+                ted_adresse = ft_strchr(ted_adresse + 1, '~');
+        }
+        else
+            ted_adresse = ft_strchr(ted_adresse + 1, '~');
+    }
+    return (command);
+}
 char *parse_env(char *s, t_list *envp)
 {
     char *dollr_sign;
     int i = 1;
     int j = 1;
 
-    //s = (handle_ted(s));
+    s = handle_ted(envp, s);
     dollr_sign = ft_strchr(s, '$');
     while (dollr_sign)
     {
         i = 1;
-        if (((ft_isalpha(*(dollr_sign + 1))) || (*(dollr_sign + 1) == '_')))
+        if (((ft_isalnum(*(dollr_sign + 1))) || (*(dollr_sign + 1) == '_')))
         {
             if (string_is_inside(s, (int)(dollr_sign - s)) == DOUBLE_QUOTES || string_is_inside(s, (int)(dollr_sign - s)) == INSIDE_NOTHING)
             {
                 while (ft_isalnum(dollr_sign[i]))
                     i++;
-                printf("i = %d\n", i);
                 char *to_replace = get_value(envp, ft_substr(dollr_sign + 1, 0, i - 1));
                 s = replace_strin_in_string(s, (int)(dollr_sign - s), (dollr_sign - s + i), to_replace);
                 dollr_sign = ft_strchr(s, '$');
